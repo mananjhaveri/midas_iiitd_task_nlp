@@ -31,7 +31,7 @@ Note:
 
 ## Step 1: Cleaning
 
-Like in most text classification problems, my first step here was to clean the text. I took the description column, removed rows with null values and used the following pipeline:
+Like in most text classification problems, my first step here was to clean the text. I took the description column, removed rows with null values and used the following pipeline: 
 
 ```python
 cleaning_pipeline = [
@@ -212,12 +212,23 @@ Now, regarding the models, here is a small report of the scores.
 
 |      Model    | Fold 0 | Fold 1 | Fold 2 | Fold 3 | Fold 4 | Average f1 score |
 |      ---      | ---    | ---    |  ---   | ---    | ---    | ---              |
-| Naive Baye's  | 0.9464 |	0.9486|	0.9451 | 0.9529	| 0.9471 | 0.9480 |
+| Naive Bayes  | 0.9464 |	0.9486|	0.9451 | 0.9529	| 0.9471 | 0.9480 |
 | Logistic Regression | 0.9704 | 0.9702 |	0.9719 | 0.9719 | 0.9729 | 0.9715   |
 | LSTM | 0.9637 | 0.9564 |	0.9672 |0.9656 | 0.9661 | 0.9638 |
 Random Forest | | | | | 
 
 Clearly, Logistic Regression and LSTM are the top performers. But, at the same time Random Forest and Naive Baye's are also performing too well. 
+
+We can have a look at the classification reports too to confirm that minority classes are also being predicted satisfactorily.
+
+<table>
+  <tr>
+    <td>Naive Bayes<img src="media/nb_classif.jpg"></td>
+    <td>Random Forest<img src="media/rf_classif.jpg"></td>
+    <td>Logistic Regression<img src="media/lr_classif.jpg" ></td>
+   </tr> 
+</table>
+
 
 Let's move on to see the LSTM model's architecture.
 
@@ -255,6 +266,9 @@ Find the compelete source code for Training ML models in [src/train.py](https://
     * resample.py and decompose.py are optional (make sure the file names are consistent if using these 2 files)
     * pass ml model of choice as argument (eg: python train.py --model nb, this will use Naive Baye's model). Head to utils.py to see the model and model tag dictionary.
 
+<br>
+<br>
+
 # Prediction on test text
 
 Simply use the predict.py using the following command:
@@ -265,12 +279,18 @@ python predict.py --model model_of_choice
 
 It will prompt for text, enter the text to be classified.
 
+<br>
+<br>
+
 # What more can be done?
 * If we get more data (and processing power), we can use robus techniques like FastText embedding models, BERT transformer (or other powerful transformer).
 * Clubbing categories is also an option. For example, there are two different categories for *Home & Kitchen* and *Kitchen & Dining*. I am not an expert in the domain but it may see that these two can be clubbed tohether(with some domain assistance).
 * Other features like price, rating, etc are also available. We can surely make use of them to enhance the model.
 * Image url are also provided, maybe we can train a model on those images and ensemble it with the text classifier.
 * Hyperparameter optimization, a very crucial step for fine tuning of the model, is also remaining. It can provide a little boost to the models.
+
+<br>
+<br>
 
 # Key Takeaways
 

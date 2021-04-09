@@ -19,7 +19,7 @@ def run(df, fold, ml_model):
     score = metrics.f1_score(y_valid, preds, average="micro")
     conf_mat = metrics.confusion_matrix(y_valid, preds)
     print(f'Fold={fold} Score={score}')
-    joblib.dump(model, f"../models/{ml_model}_{fold}.bin")
+    # joblib.dump(model, f"../models/{ml_model}_{fold}.bin")
 
     # plt.figure(figsize = (20, 18))
     # conf_mat_plot = sns.heatmap(conf_mat, annot=True, fmt=".2%")
