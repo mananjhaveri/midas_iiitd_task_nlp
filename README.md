@@ -138,7 +138,7 @@ STOP_WORDS = ["service", "ship", "flipkart", "product", "geniune", "delivery", "
 ```
 
 
-Find the complete souce code of the cleaning pipeline in [src/clean.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/clean.py).
+Find the complete souce code of the cleaning pipeline in [src/clean.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/clean.py) and for Word Cloud in [src/word_cloud.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/word_cloud.py)
 
 <br>
 <br>
