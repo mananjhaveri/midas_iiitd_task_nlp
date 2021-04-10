@@ -60,9 +60,9 @@ This was all to clean the description. But the category column is very messy too
 
 For most values in the *product_category_tree*, a tree of categories is given (eg: Clothing>>Men's Clothing>>T Shirts>>Round Neck Tshirts).
 
-It is simple in this case, I just took the root of the tree as the parent category and make it the label.
+I just took the root of the tree as the parent category and made it the label.
 
-What about the columns with no proper trees? We can't simply drop them because it's not a small number. In the image below, the *NONE* category refers to the samples with no improper labels.
+What about the columns with no proper trees? We can't simply drop them because it's not a small number. In the image below, the *NONE* category refers to the samples with improper labels.
 
 
 <img src="media/cats_none.JPG" alt="Showing count of None">
@@ -166,7 +166,7 @@ And with this simple function, I created 5 folds in the dataset to help in cross
 
 ## Step 3: Embeddings
 
-Machines understand numbers, not text. Now, it's time to convert the text data to numbers. We can use *CountVectorizer* but it is very basic and always underperforms compared to *TfidfVectorizer*. So I went ahead with Tfidf.
+*CountVectorizer* can be used but it is very basic and always underperforms compared to *TfidfVectorizer*. So I went ahead with Tfidf.
 
 parameters used:
 ```python
@@ -175,11 +175,11 @@ tvf = TfidfVectorizer(tokenizer=word_tokenize, token_pattern=None, ngram_range=(
 ```
 I tried different values for *MAX_FEATURES* but ultimately 10000 was the best fit. 
 
-Find the compelete source code for embeddings in [src/tfidf.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/tfidf.py).
+Find the complete source code for embeddings in [src/tfidf.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/tfidf.py).
 
-Also, I tried to use the currently famouse and powerful *FastText* vectorization. It was computationally very heavy and my Laptop crashed thrice while trying to use it. So, went with *TfidfVectorizer* only. 
+Also, I tried to use the currently famous and powerful *FastText* vectorization. It was computationally very heavy and my Laptop crashed thrice while trying to use it. So, I went ahead with *TfidfVectorizer*. 
 
-Find the complete source code for Fast Text in [src/fast_text.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/fast_text.py).
+Find the complete source code for FastText in [src/fast_text.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/fast_text.py).
 
 <br>
 <br>
@@ -199,16 +199,16 @@ Next, there's Decomposition. I chose *MAX_FEATURES* as 10000, which also means 1
 
 Even though models were training satisfactorily, I tried decomposition methods like *TruncatedSVD* and *NMF*. It helped to reduce dimension, save a few seconds in training but the model's performance was being compromised and 10000 columns wasn't taking forever. So, I chose not to add this step either to my final pipeline. 
 
-Find the compelete source code for Resampling in [src/resampling.py](https://github.com/mananjhaveri/midas_iiitd_task/resampling.py) and for Decomposition in [src/decompose.py](https://github.com/mananjhaveri/midas_iiitd_task/decompose.py).
+Find the complete source code for Resampling in [src/resampling.py](https://github.com/mananjhaveri/midas_iiitd_task/resampling.py) and for Decomposition in [src/decompose.py](https://github.com/mananjhaveri/midas_iiitd_task/decompose.py).
 
 <br>
 <br>
 
 ## Step 5: Training Models and Evaluation
 
-I have tried few different basic ML models and an LSTM model. But before exploring the models, it's important to decide a suitable evaluation metric. 
+I tried basic ML models and an LSTM model. But before exploring the models, it's important to decide a suitable evaluation metric. 
 
-As seen earlier, the data is highly imbalanced; accuracy is definetly a bad choice. It's essential to manage precision and recall both. Therefore, the most appropriate scoring metric will be F1 score. 
+Since the data is highly imbalanced, accuracy is definetly a bad choice. It's essential to manage precision and recall both. Therefore, the most appropriate scoring metric will be F1 score. 
 
 
 >                                            F1 = 2PR / (P + R)
@@ -259,13 +259,13 @@ Let's move on to see the LSTM model's architecture.
 * Dense: Output layer with neurons equal to number of classes
 * Compilation: CategoricalCrossentropy as it is a multi-classification task, optimizer = Adam(1e-4)
 
-I tried multiple dense layers and multiple LSTM layers. But that just seemed to be complicating thr model and overfitting on the data. It's perhaps because the data is performing well on basic models like Logistic Regression so a simple LSTM model also suffices for this task.
+I tried multiple dense layers and multiple LSTM layers. But that just seemed to be complicating the model and overfitting on the data. It's perhaps because the data is performing well on basic models like Logistic Regression so a simple LSTM model also suffices for this task.
 
 We can see the plots of loss and f1 score with respect to epochs here:
 
 <img src="media/lstm_result_plot.jpg">
 
-Find the compelete source code for Training ML models in [src/train.py](https://github.com/mananjhaveri/midas_iiitd_task/train.py) and for LSTM in [src/train_lstm.py](https://github.com/mananjhaveri/midas_iiitd_task/train_lstm.py).
+Find the complete source code for Training ML models in [src/train.py](https://github.com/mananjhaveri/midas_iiitd_task/train.py) and for LSTM in [src/train_lstm.py](https://github.com/mananjhaveri/midas_iiitd_task/train_lstm.py).
 
 <br>
 <br>
