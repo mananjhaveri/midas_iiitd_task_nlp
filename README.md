@@ -1,4 +1,4 @@
-# MIDAS @ IIITD Summer Internship - Task: 3
+# MIDAS @ IIITD Summer Internship - Task 3: Natural Language Processing
 
 # Assignment Details-
 Use a given dataset to build a model to predict the category using description. Write code in python. Using Jupyter notebook is encouraged. 
@@ -183,6 +183,9 @@ Find the compelete source code for Fast Text in [src/fast_text.py](https://githu
 
 <br>
 <br>
+<br>
+<br>
+<br>
 
 ## Step 4: Resampling and/or Decomposition
 
@@ -214,16 +217,24 @@ Here, F1 = F1 score, P = precision, R = recall
 
 Now, regarding the models, here is a small report of the scores. 
 
-|      Model    | Fold 0 | Fold 1 | Fold 2 | Fold 3 | Fold 4 | Average f1 score |
-|      ---      | ---    | ---    |  ---   | ---    | ---    | ---              |
-| Naive Bayes  | 0.9464 |	0.9486|	0.9451 | 0.9529	| 0.9471 | 0.9480 |
-| Logistic Regression | 0.9704 | 0.9702 |	0.9719 | 0.9719 | 0.9729 | 0.9715   |
-| LSTM | 0.9637 | 0.9564 |	0.9672 |0.9656 | 0.9661 | 0.9638 |
-Random Forest | | | | | 
+<br>
+<br>
+
+<img src="media/model_records.jpg" alt="model records">
+
+<br>
+<br>
 
 Clearly, Logistic Regression and LSTM are the top performers. But, at the same time Random Forest and Naive Baye's are also performing too well. 
 
 We can have a look at the classification reports too to confirm that minority classes are also being predicted satisfactorily.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <table>
   <tr>
@@ -250,8 +261,14 @@ Let's move on to see the LSTM model's architecture.
 
 I tried multiple dense layers and multiple LSTM layers. But, that just seemed to be complicating thr model and overfitting on the data. It's perhaps because the data is performing well on basic models like Logistic Regression so a simple LSTM model also suffices for this task.
 
+We can see the plots of loss and f1 score with respect to epochs here:
+
+<img src="media/lstm_result_plot.jpg">
+
 Find the compelete source code for Training ML models in [src/train.py](https://github.com/mananjhaveri/midas_iiitd_task/train.py) and for LSTM in [src/train_lstm.py](https://github.com/mananjhaveri/midas_iiitd_task/train_lstm.py).
 
+<br>
+<br>
 <br>
 <br>
 
@@ -287,11 +304,11 @@ It will prompt for text, enter the text to be classified.
 <br>
 
 # What more can be done?
-* If we get more data (and processing power), we can use robus techniques like FastText embedding models, BERT transformer (or other powerful transformer).
-* Clubbing categories is also an option. For example, there are two different categories for *Home & Kitchen* and *Kitchen & Dining*. I am not an expert in the domain but it may see that these two can be clubbed tohether(with some domain assistance).
-* Other features like price, rating, etc are also available. We can surely make use of them to enhance the model.
-* Image url are also provided, maybe we can train a model on those images and ensemble it with the text classifier.
-* Hyperparameter optimization, a very crucial step for fine tuning of the model, is also remaining. It can provide a little boost to the models.
+* If we get more data (and processing power), we can use robust techniques like **FastText embedding models**, **BERT transformer** (or other powerful transformer).
+* **Clubbing categories** is also an option. For example, there are two different categories for *Home & Kitchen* and *Kitchen & Dining*. I am not an expert in the domain but it may see that these two can be clubbed tohether(with some domain assistance).
+* **Extra features** like price, rating, etc are also available. We can surely make use of them to enhance the model.
+* Image url are also provided, maybe we can train a model on those images. Then we can **ensemble Image classifier with the text classifier**.
+* **Hyperparameter optimization**, a very crucial step for fine tuning of the model, is also remaining. It can provide a little boost to the models.
 
 <br>
 <br>
