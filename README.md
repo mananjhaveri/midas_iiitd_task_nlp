@@ -65,7 +65,7 @@ It is simple in this case, I just took the root of the tree as the parent catego
 What about the columns with no proper trees? We can't drop them simply because it's not a small number. In the imae below, the *NONE* category refers to the samples with no improper labels.
 
 
-<img src="media/cats_none.jpg" alt="Showing count of None">
+<img src="media/cats_none.JPG" alt="Showing count of None">
 
 
 I planned to do some manual labelling using a dictionary which maps important key words to a category.
@@ -86,7 +86,7 @@ mapping_untidy_categores = {
 Once this is done, we will have cleaned text and cleaned labels. This is the distribution now:
 
 
-<img src="media/cat_counts_1.jpg" alt="counts of categories">
+<img src="media/cat_counts_1.JPG" alt="counts of categories">
 
 <br>
 <br>
@@ -98,7 +98,7 @@ If we check the value counts of different labels, we may see that some have coun
 Now, there are 26 unique categories for classification. 
 
 
-<img src="media/cat_counts_2.jpg" alt="counts of categories">
+<img src="media/cat_counts_2.JPG" alt="counts of categories">
 
 <br>
 <br>
@@ -238,9 +238,9 @@ We can have a look at the classification reports too to confirm that minority cl
 
 <table>
   <tr>
-    <td>Naive Bayes<img src="media/nb_classif.jpg"></td>
-    <td>Random Forest<img src="media/rf_classif.jpg"></td>
-    <td>Logistic Regression<img src="media/lr_classif.jpg" ></td>
+    <td>Naive Bayes<img src="media/nb_classif.JPG"></td>
+    <td>Random Forest<img src="media/rf_classif.JPG"></td>
+    <td>Logistic Regression<img src="media/lr_classif.JPG" ></td>
    </tr> 
 </table>
 
