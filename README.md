@@ -45,24 +45,24 @@ cleaning_pipeline = [
 
 So, let's go through each one of them:
 
-1) Expanding Contraction: simply take a word, if it's a contraction then return the expanded form, else return as is. (eg: can't -> can not)
+1) Expanding Contraction: changing contractions to expanded terms (eg: can't -> can not)
 
-2) Tokenize and remove punctuations: Tokenizing each word using *nltk.tokenize.MWETokenizer* and remove all the punctuation  marks as they add no value here.
+2) Tokenize and remove punctuations: Tokenizing each word using *nltk.tokenize.MWETokenizer* and removing all the punctuation  marks as they add no value here.
 
 3) Tagging: tagging the tokens using *nltk.pos_tag* (reason explained in next point)
 
-4) Lemmatization: lemmatization using *nltk.stem.WordNetLemmatizer* of tokens who have a *pos_tag*, otherwise pass token unchanged
+4) Lemmatization: lemmatization using *nltk.stem.WordNetLemmatizer* of tokens who have a *pos_tag*
 
 5) Stopwords: Removing unnecessary token from the text
 
 
-This was all to clean the description. But, the category column is very messy too.
+This was all to clean the description. But the category column is very messy too.
 
 For most values in the *product_category_tree*, a tree of categories is given (eg: Clothing>>Men's Clothing>>T Shirts>>Round Neck Tshirts).
 
 It is simple in this case, I just took the root of the tree as the parent category and make it the label.
 
-What about the columns with no proper trees? We can't drop them simply because it's not a small number. In the imae below, the *NONE* category refers to the samples with no improper labels.
+What about the columns with no proper trees? We can't simply drop them because it's not a small number. In the image below, the *NONE* category refers to the samples with no improper labels.
 
 
 <img src="media/cats_none.JPG" alt="Showing count of None">
@@ -93,7 +93,7 @@ Once this is done, we will have cleaned text and cleaned labels. This is the dis
 
 However, there's one more thing to be done. 
 
-If we check the value counts of different labels, we may see that some have counts as low as 1 and 2. This is not a typical scenario for Machine Learning. Working with such small number of samples for a category will surely lead to unfavourable results. Best option is to get more data. Since that is not possible meanwhile, I chose to drop all rows having categories with count less than 25. 
+If we check the value counts of different labels, we may see that some have counts as low as 1 and 2. This is not a typical scenario in Machine Learning. Working with such small number of samples for a category will surely lead to unfavourable results. Best option is to get more data. Since that is not possible, I chose to drop all rows having categories with count less than 25. 
 
 Now, there are 26 unique categories for classification. 
 
@@ -105,9 +105,9 @@ Now, there are 26 unique categories for classification.
 
 ### Wordclouds and custom stop words
 
-Wordclouds can help us find the important topics. We can use them to find the popular words in each in each category. 
+Wordclouds can help us find the important topics. We can use them to find the popular words in each category. 
 
-In this case, the word clouds had some eerie insights. Let's look at a few first.
+In this case, the word clouds had some strange insights. Let's look at a few first.
 
 <br>
 
@@ -124,7 +124,7 @@ In this case, the word clouds had some eerie insights. Let's look at a few first
   </tr>
 </table>
 
-For *Mobile & Accessories*, the top words are meaningful and add value in the context of this problem. But, there are certain words which appear in most categories and add little to no meaning to the description. These include words like brand, sale, discount, flipkart, price, free, ship, delivery.
+For *Mobile & Accessories*, the top words are meaningful and add value in the context of this problem. But there are certain words which appear in most categories and add little to no meaning to the description. These include words like brand, sale, discount, flipkart, price, free, ship, delivery.
 
 We need to make a custom list of stopwords and pass it before word embeddings.
 
@@ -138,7 +138,7 @@ STOP_WORDS = ["service", "ship", "flipkart", "product", "geniune", "delivery", "
 ```
 
 
-Find the complete souce code of the cleaning pipeline in [src/clean.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/clean.py) and for Word Cloud in [src/word_cloud.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/word_cloud.py)
+Find the complete source code of the cleaning pipeline in [src/clean.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/clean.py) and for Word Cloud in [src/word_cloud.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/word_cloud.py)
 
 <br>
 <br>
@@ -166,7 +166,7 @@ And with this simple function, I created 5 folds in the dataset to help in cross
 
 ## Step 3: Embeddings
 
-Machines understand numbers, not text. Now, it's time to convert the text data to numbers. We can use *CountVectorizer* but it is very basic and always underperforms compared to *TfidfVectorizer*. So I went ahead with Tfidf only.
+Machines understand numbers, not text. Now, it's time to convert the text data to numbers. We can use *CountVectorizer* but it is very basic and always underperforms compared to *TfidfVectorizer*. So I went ahead with Tfidf.
 
 parameters used:
 ```python
@@ -179,7 +179,7 @@ Find the compelete source code for embeddings in [src/tfidf.py](https://github.c
 
 Also, I tried to use the currently famouse and powerful *FastText* vectorization. It was computationally very heavy and my Laptop crashed thrice while trying to use it. So, went with *TfidfVectorizer* only. 
 
-Find the compelete source code for Fast Text in [src/fast_text.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/fast_text.py).
+Find the complete source code for Fast Text in [src/fast_text.py](https://github.com/mananjhaveri/midas_iiitd_task/blob/main/src/fast_text.py).
 
 <br>
 <br>
@@ -189,15 +189,15 @@ Find the compelete source code for Fast Text in [src/fast_text.py](https://githu
 
 ## Step 4: Resampling and/or Decomposition
 
-As we saw earlier, categories with count less than 25 are dropped. However, 25 still may seem less. Resmapling is usually helpful to create similar samples for minority classes. 
+As we saw earlier, categories with count less than 25 are dropped. However, 25 may still seem less. Resmapling is usually helpful to create similar samples for minority classes. 
 
-From experience, up-sampling may have produce a favourable result in a scenario where minority class has, say, 3000 samples and it needs to be increased to 5000 samples. Going from 25 to even 500 is very likely to produce unfavourable results and introduce bias in the data.
+From experience, up-sampling may produce a favourable result in a scenario where minority class has, say, 3000 samples and it needs to be increased to 5000 samples. Going from 25 to even 500 is very likely to produce unfavourable results and introduce bias in the data.
 
-However, I still tried up-sampling using SMOTE. But, consistent to my hypothesis, the results were unfavourable, dropping the score by 15-20%.
+However, I still tried up-sampling using SMOTE. But consistent to my hypothesis, the results were unfavourable, dropping the score by 15-20%.
 
-Next, there's Decomposition. I have chose *MAX_FEATURES* as 10000, which also means 10000 columns. That's huge. 
+Next, there's Decomposition. I chose *MAX_FEATURES* as 10000, which also means 10000 columns. That's huge. 
 
-Even though models were training satisfactorily, I tried decomposition methods like *TruncatedSVD* and *NMF*. It helped to reduce dimension, save a few seconds in training but the model's performance was being compromised and 10000 columns wasn't taking forever. So, I chose to not add this step either to my final pipeline. 
+Even though models were training satisfactorily, I tried decomposition methods like *TruncatedSVD* and *NMF*. It helped to reduce dimension, save a few seconds in training but the model's performance was being compromised and 10000 columns wasn't taking forever. So, I chose not to add this step either to my final pipeline. 
 
 Find the compelete source code for Resampling in [src/resampling.py](https://github.com/mananjhaveri/midas_iiitd_task/resampling.py) and for Decomposition in [src/decompose.py](https://github.com/mananjhaveri/midas_iiitd_task/decompose.py).
 
@@ -206,9 +206,9 @@ Find the compelete source code for Resampling in [src/resampling.py](https://git
 
 ## Step 5: Training Models and Evaluation
 
-I have tried few different basic ML models and an LSTM model. But, before exploring the models, it's important to decide a suitable evaluation metric. 
+I have tried few different basic ML models and an LSTM model. But before exploring the models, it's important to decide a suitable evaluation metric. 
 
-As seen earlier, the data is highly imbalanced; accuracy is definetly a bad choice. It's essential to manage precision and recall, both. Therefore, the most appropriate scoring metric will be F1 score. 
+As seen earlier, the data is highly imbalanced; accuracy is definetly a bad choice. It's essential to manage precision and recall both. Therefore, the most appropriate scoring metric will be F1 score. 
 
 
 >                                            F1 = 2PR / (P + R)
@@ -225,9 +225,9 @@ Now, regarding the models, here is a small report of the scores.
 <br>
 <br>
 
-Clearly, Logistic Regression and LSTM are the top performers. But, at the same time Random Forest and Naive Baye's are also performing too well. 
+Clearly, Logistic Regression and LSTM are the top performers. But at the same time Random Forest and Naive Baye's are also performing well. 
 
-We can have a look at the classification reports too to confirm that minority classes are also being predicted satisfactorily.
+We can also have a look at the classification reports to confirm that minority classes are also being predicted satisfactorily.
 
 <br>
 <br>
@@ -259,7 +259,7 @@ Let's move on to see the LSTM model's architecture.
 * Dense: Output layer with neurons equal to number of classes
 * Compilation: CategoricalCrossentropy as it is a multi-classification task, optimizer = Adam(1e-4)
 
-I tried multiple dense layers and multiple LSTM layers. But, that just seemed to be complicating thr model and overfitting on the data. It's perhaps because the data is performing well on basic models like Logistic Regression so a simple LSTM model also suffices for this task.
+I tried multiple dense layers and multiple LSTM layers. But that just seemed to be complicating thr model and overfitting on the data. It's perhaps because the data is performing well on basic models like Logistic Regression so a simple LSTM model also suffices for this task.
 
 We can see the plots of loss and f1 score with respect to epochs here:
 
@@ -274,7 +274,7 @@ Find the compelete source code for Training ML models in [src/train.py](https://
 
 # Reproducing
 
-* Use the [requirements/requirements.txt](https://github.com/mananjhaveri/midas_iiitd_task/requirements/requirements.txt) **OR** directly reuse the virtual environment using [requirements/environment.yml](https://github.com/mananjhaveri/midas_iiitd_task/requirements/environment.yml)
+* Use the [requirements/requirements.txt](https://github.com/mananjhaveri/midas_iiitd_task_nlp/tree/master/requirements/requirements.txt) **OR** directly reuse the virtual environment using [requirements/environment.yml](https://github.com/mananjhaveri/midas_iiitd_task_nlp/tree/master/requirements/environment.yml)
 
 * Clone this repository
 
@@ -305,7 +305,7 @@ It will prompt for text, enter the text to be classified.
 
 # What more can be done?
 * If we get more data (and processing power), we can use robust techniques like **FastText embedding models**, **BERT transformer** (or other powerful transformer).
-* **Clubbing categories** is also an option. For example, there are two different categories for *Home & Kitchen* and *Kitchen & Dining*. I am not an expert in the domain but it may see that these two can be clubbed tohether(with some domain assistance).
+* **Clubbing categories** is also an option. For example, there are two different categories for *Home & Kitchen* and *Kitchen & Dining*. I am not an expert in the domain but it may seem that these two can be clubbed together(with some domain assistance).
 * **Extra features** like price, rating, etc are also available. We can surely make use of them to enhance the model.
 * Image url are also provided, maybe we can train a model on those images. Then we can **ensemble Image classifier with the text classifier**.
 * **Hyperparameter optimization**, a very crucial step for fine tuning of the model, is also remaining. It can provide a little boost to the models.
@@ -317,4 +317,4 @@ It will prompt for text, enter the text to be classified.
 
 Honestly, the data at first seemed intimidating becuase the category column required a lot of cleaning. But just some basic methods helped to clean it; it took some time though.
 
-But, in the end, after completing this project, I feel it just required very simple techniques but crucial fundamental preprocessing. It's always a bad idea to dive right into Deep Learning models. Even here, the simplest model of all, Logistic Regression, is outperforming the rest. All in all, starting with very fundamental steps and building your way up is the important lesson learned.
+But in the end, after completing this project, I feel it just required very simple techniques but crucial fundamental preprocessing. It's always a bad idea to dive right into Deep Learning models. Even here, the simplest model of all, Logistic Regression, is outperforming the rest. All in all, starting with very fundamental steps and building your way up is the important lesson learned.
