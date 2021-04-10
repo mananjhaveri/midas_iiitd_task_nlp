@@ -16,6 +16,7 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
 
+# dictionary for mapping contractions to expanded terms
 cList = {
   "ain't": "am not",
   "aren't": "are not",
@@ -137,9 +138,12 @@ cList = {
   "you've": "you have"
 }
 
+# regex statement to expand contractions
 c_re = re.compile('(%s)' % '|'.join(cList.keys()))
 
 lemmatizer = WordNetLemmatizer()
+
+# mapping with pos tags
 def nltk_tag_to_wordnet_tag(nltk_tag):
     if nltk_tag.startswith('J'):
         return wordnet.ADJ
@@ -152,12 +156,14 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
     else:          
         return None
 
+# expanfing contractions
 def expandContractions(text, c_re=c_re):
     def replace(match):
         return cList[match.group(0)]
     return c_re.sub(replace, text.lower())
 
 
+# tokenization and removing punctuation
 def tokenize_and_remove_punct(text):
   text = text.translate(str.maketrans('', '', string.punctuation))
   mtokenizer = MWETokenizer()
@@ -169,11 +175,12 @@ def tokenize_and_remove_punct(text):
   return words
 
 
+# adding pos tags
 def tags(tokens):
   tags = nltk.pos_tag(tokens)
   return tags
   
-
+# lemmatization
 def lemmatize(tags): 
     wordnet_tagged = map(lambda x: (x[0], nltk_tag_to_wordnet_tag(x[1])), tags)
     lemmatized_sentence = []
@@ -186,7 +193,7 @@ def lemmatize(tags):
             lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
     return lemmatized_sentence
 
-
+# removing stop words
 def stopword_removal(words):
   stopwords = nltk.corpus.stopwords.words('english')
   newStopWords = ['said','say', 'says','mr']
@@ -198,7 +205,7 @@ def stopword_removal(words):
   unique = list(dict.fromkeys(word_filtered))
   return " ".join(unique)
 
-
+# creating pipeline
 def pipelinize(function, active=True):
     def list_comprehend_a_function(list_or_series, active=True):
         if active:
@@ -215,6 +222,7 @@ pipe = Pipeline(estimators)
 untidy_categories = []
 d = {"Sunglasses": "Eyewear"}# "Food & Nutrition": "Kitchen & Dining", "Household Supplies": "Home Improvement"}
 
+# dictionary to map key words to category for manual labelling
 mapping_untidy_categores = {
     "Pens & Stationery": ["paper", "sheets", "self stick", "notebook", "pen"],
     "Clothing": ["kurta", "kurti","stole", "dress", "shorts", "capri", "jeans", "top", "brief", "jumpsuit", "sleeve", "boxer", "leggings", "shirt",
@@ -243,6 +251,7 @@ mapping_untidy_categores = {
     "Baby Care": ["baby"]
 }
 
+# clean labels, extract parent category or map using above dictionary
 def clean_labels(x):
     if ">>" in x:
         y = x.split(">>")[0].strip()[2:]
@@ -259,6 +268,7 @@ def clean_labels(x):
         untidy_categories.append(x)
         return "NONE"
 
+# threshold setting for counts of classes
 def min_samples(df, n_min_samples):
     ret = []
     count = df.category.value_counts()
@@ -267,6 +277,7 @@ def min_samples(df, n_min_samples):
             ret.append(cat)
     return ret
 
+# plotting bar graph of categories and count 
 def get_bar(x, y):
     fig = plt.figure(figsize = (12, 10))
     plt.bar(x, y, color ='maroon',
@@ -280,21 +291,25 @@ def get_bar(x, y):
 
 
 if __name__ == "__main__":
+    # import data
     df = pd.read_csv("../data/data.csv")
 
     df = df[["description", "product_category_tree", "image"]].copy()
     df = df.dropna()
 
+    # cleaning targets
     df["category"] = df["product_category_tree"].apply(clean_labels)
+    df.drop(["product_category_tree"], axis=1, inplace=True)
     vc = df.category.value_counts()
     # get_bar(list(vc.index), list(vc))
+
+    # cleaning description
     cleaned_text = []
     for t in df['description']:
         cleaned_text.append(pipe.transform([t])[0])
     df['description'] = cleaned_text
 
-    df.drop(["product_category_tree"], axis=1, inplace=True)
-
+    # setting threshold of 25 for counts of classes
     for N_MIN_SAMPLES in [25]:
         final_text = df[df['category'].map(df['category'].value_counts()) >= N_MIN_SAMPLES].copy()
         vc = final_text.category.value_counts()

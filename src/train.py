@@ -3,23 +3,30 @@ import argparse
 
 def run(df, fold, ml_model):
 
+    # separate train and valid data
     train = df[df.kfold != fold].reset_index(drop=True)
     test = df[df.kfold == fold].reset_index(drop=True)
 
+    # separate X and y
     x_train = train.drop(["kfold", "category"], axis=1)
     y_train = train.category.values
 
     x_valid = test.drop(["kfold", "category"], axis=1)
     y_valid = test.category.values
 
-    model = models[ml_model]
+    # fitting model 
+    model =  models[ml_model]
     model.fit(x_train, y_train)
     preds = model.predict(x_valid)
 
+    # predicting on validation data
     score = metrics.f1_score(y_valid, preds, average="micro")
     conf_mat = metrics.confusion_matrix(y_valid, preds)
     print(f'Fold={fold} Score={score}')
-    # joblib.dump(model, f"../models/{ml_model}_{fold}.bin")
+    print(metrics.classification_report(y_valid, preds))
+
+    # saving model
+    joblib.dump(model, f"../models/{ml_model}_{fold}.bin")
 
     # plt.figure(figsize = (20, 18))
     # conf_mat_plot = sns.heatmap(conf_mat, annot=True, fmt=".2%")
@@ -33,8 +40,6 @@ def run(df, fold, ml_model):
     
     # df = pd.DataFrame(d, index=pd.Series(y_valid).value_counts().index)
     # print(df, "\n\n")
-
-    print(metrics.classification_report(y_valid, preds))
 
     return score
 
@@ -50,7 +55,7 @@ if __name__ == "__main__":
     ml_model = args.model
 
     # import data
-    df = pd.read_csv('../data/tfidf_10000_new.csv')
+    df = pd.read_csv('../data/tfidf_10000.csv')
     print(df.shape)
 
     y = df["category"].values
@@ -77,4 +82,5 @@ if __name__ == "__main__":
     for fold in range(5):
         average_score += run(df, fold, ml_model)
     
+    # average of all models
     print(average_score / 5)

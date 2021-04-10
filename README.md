@@ -62,7 +62,11 @@ For most values in the *product_category_tree*, a tree of categories is given (e
 
 It is simple in this case, I just took the root of the tree as the parent category and make it the label.
 
-What about the columns with no proper trees? We can't drop them simply because it's not a small number.
+What about the columns with no proper trees? We can't drop them simply because it's not a small number. In the imae below, the *NONE* category refers to the samples with no improper labels.
+
+
+<img src="media/cats_none.jpg" alt="Showing count of None">
+
 
 I planned to do some manual labelling using a dictionary which maps important key words to a category.
 
@@ -89,9 +93,9 @@ Once this is done, we will have cleaned text and cleaned labels. This is the dis
 
 However, there's one more thing to be done. 
 
-If check the value counts of different labels, we may see that some have counts as low as 2. This is not a typical scenario for Machine Learning. Wroking with such small number of sample for category will surely lead to unfavourable results. Best option is to get more data. Since that is not possible meanwhile, I chose to drop all rows having categories with count less than 25. 
+If we check the value counts of different labels, we may see that some have counts as low as 1 and 2. This is not a typical scenario for Machine Learning. Working with such small number of samples for a category will surely lead to unfavourable results. Best option is to get more data. Since that is not possible meanwhile, I chose to drop all rows having categories with count less than 25. 
 
-Now, there are n unique categories for classification. 
+Now, there are 26 unique categories for classification. 
 
 
 <img src="media/cat_counts_2.jpg" alt="counts of categories">

@@ -1,5 +1,6 @@
 from utils import *
 
+# general function for vectorization
 def sentence_to_vec(s, embedding_dict, stop_words, tokenizer):
 
     words = str(s).lower()
@@ -21,6 +22,7 @@ def sentence_to_vec(s, embedding_dict, stop_words, tokenizer):
     return v / np.sqrt((v ** 2).sum())
 
 
+# loading FastText vectors
 def load_vectors(fname):
     # taken from: https://fasttext.cc/docs/en/english-vectors.html
     fin = io.open(
@@ -39,7 +41,7 @@ def load_vectors(fname):
     return data
 
 if __name__ == "__main__":
-
+    # import data
     df = pd.read_csv('../data/text_25.csv')
     y = df.category.values
     enc = preprocessing.LabelEncoder()
@@ -47,6 +49,7 @@ if __name__ == "__main__":
 
     embeddings = load_vectors('../data/crawl-300d-2M.vec')
 
+    # iterate over description column and convert each to vectors. If not possible, returns array with 0s
     vectors = []
     for description in df.description.values:
         vectors.append(

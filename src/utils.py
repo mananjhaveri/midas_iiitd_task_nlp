@@ -7,7 +7,7 @@ import io
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import xgboost 
 
 # use the following models:
 models = {
@@ -15,9 +15,11 @@ models = {
     "rf": ensemble.RandomForestClassifier(n_estimators=500),
     "lr": linear_model.LogisticRegression(multi_class='multinomial'),
     "svc": svm.SVC(),
-    "dt": tree.DecisionTreeClassifier()
+    "dt": tree.DecisionTreeClassifier(),
+    "xgb": xgboost.XGBClassifier(n_jobs=-1)
 }
 
+# create folds for cross validation 
 def create_folds(data):
     data["kfold"] = -1
     data = data.sample(frac=1).reset_index(drop=True)

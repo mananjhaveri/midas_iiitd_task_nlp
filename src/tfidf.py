@@ -3,9 +3,11 @@ from nltk.tokenize import word_tokenize
 from sklearn import decomposition 
 from sklearn.feature_extraction.text import TfidfVectorizer      
 
+# remove tabs and new line chars
 def remove_tabs(s):
     return re.sub('\s+',' ', s).strip()
 
+# custom stop words
 STOP_WORDS = ["service", "ship", "flipkart", "product", "geniune", "delivery", "online", "best", "price", "discount", "free"
              "key", "feature", "guarantee", "low", "buy", "day", "flipkartcom", "shop", "rs", "brand", "india", "branded", "cash",
              "package", "sale", "days"]
@@ -17,6 +19,7 @@ if __name__ == "__main__":
     df = pd.read_csv(f'../data/text.csv')
     df["description"] = df["description"].apply(lambda x: remove_tabs(x))
 
+    # transforming the matrix
     tvf = TfidfVectorizer(tokenizer=word_tokenize, token_pattern=None, ngram_range=(1, 2), max_features=MAX_FEATURES, stop_words=STOP_WORDS)
     tvf.fit(df["description"])
     text_transformed = tvf.transform(df["description"]).toarray()
@@ -29,5 +32,6 @@ if __name__ == "__main__":
     except:
         pass
 
+    # save the model ad file
     tfidf_df.to_csv(f'../data/tfidf_{MAX_FEATURES}_new.csv', index=False)
     joblib.dump(tvf, f"../models/tfidf_{MAX_FEATURES}_new.bin")

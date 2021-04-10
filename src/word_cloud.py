@@ -2,6 +2,7 @@ from utils import *
 import wordcloud
 from PIL import Image
 
+# function that takes text and category and crates word cloud, saves in media folder with category as the file name
 def create_word_cloud(category, text):
    cloud = wordcloud.WordCloud(background_color = "white", max_words = 200)
    cloud.generate(text)

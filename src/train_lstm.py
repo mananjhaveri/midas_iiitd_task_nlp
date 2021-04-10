@@ -60,6 +60,7 @@ def main():
     # import data
     df = pd.read_csv(f"/content/drive/MyDrive/MIDAS/data/text.csv")
     df.drop(["image"], axis=1, inplace=True)
+    
     # Lable Encoding the target variable
     enc = preprocessing.LabelEncoder()
     df["category"] = enc.fit_transform(df["category"])
